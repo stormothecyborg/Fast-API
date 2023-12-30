@@ -1,0 +1,19 @@
+sudo apt update
+
+sudo apt install apache2 #installing
+
+sudo nano /etc/apache2/sites-available/000-default.conf
+
+<VirtualHost *:80>
+   ServerAdmin sadiya@localhost
+   DocumentRoot /var/www/html
+   ProxyPass / http://127.0.0.1/
+   ProxyPassReverse / http://127.0.0.1/
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+sudo apache2ctl configtest
+#Syntax OK 
+sudo service apache2 restart
+#Open a web browser and navigate to the IP address or domain of your VM. You should see a standard 200 status code response.
