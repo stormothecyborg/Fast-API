@@ -1,0 +1,4 @@
+ab -n 100 -c 10 -k http://127.0.0.1/
+# Check Generated Access Logs:
+sudo tail -f /var/log/apache2/access.log
+#This command will display the last few lines of the access log and update in real-time as new requests are made.
