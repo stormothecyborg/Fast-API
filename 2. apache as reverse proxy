@@ -1,6 +1,10 @@
 sudo apt update
 
 sudo apt install apache2 #installing
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo systemctl restart apache2
+
 
 sudo nano /etc/apache2/sites-available/000-default.conf
 
