@@ -1,0 +1,64 @@
+#main.py 
+
+from fastapi import FastAPI, HTTPException
+
+from datetime import datetime
+
+from typing import Optional
+
+
+
+app = FastAPI()
+
+
+
+def read_access_logs(file_path):
+
+    with open(file_path, 'r') as file:
+
+        return file.readlines()
+
+
+
+def filter_logs_by_time(logs, start_time, end_time):
+
+    formatted_logs = []
+
+    for log in logs:
+
+        log_time_str = log.split()[3]  # Assuming the timestamp is at a specific position in the log
+
+        log_time = datetime.strptime(log_time_str, '%d/%b/%Y:%H:%M:%S')
+
+        if start_time <= log_time <= end_time:
+
+            formatted_logs.append(log)
+
+    return formatted_logs
+
+
+
+@app.get("/access-logs/")
+
+async def get_access_logs(start_time: str, end_time: str):
+
+    try:
+
+        start_time = datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S')
+
+        end_time = datetime.strptime(end_time, '%Y-%m-%dT%H:%M:%S')
+
+    except ValueError:
+
+        raise HTTPException(status_code=400, detail="Invalid datetime format. Use ISO 8601 format.")
+
+
+
+    access_logs = read_access_logs("/var/log/apache2/access.log")
+
+    filtered_logs = filter_logs_by_time(access_logs, start_time, end_time)
+
+
+
+    return {"access_logs": filtered_logs}
+
